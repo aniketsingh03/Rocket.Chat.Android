@@ -1,6 +1,7 @@
 package chat.rocket.android.profile.presentation
 
 import android.net.Uri
+import android.util.Log
 import chat.rocket.android.chatroom.domain.UriInteractor
 import chat.rocket.android.core.lifecycle.CancelStrategy
 import chat.rocket.android.server.domain.GetCurrentServerInteractor
@@ -33,6 +34,7 @@ class ProfilePresenter @Inject constructor(private val view: ProfileView,
                 val myself = retryIO("me") { client.me() }
                 myselfId = myself.id
                 val avatarUrl = serverUrl.avatarUrl(myself.username!!)
+                Log.d("AVATAR", avatarUrl)
                 view.showProfile(
                         avatarUrl,
                         myself.name ?: "",

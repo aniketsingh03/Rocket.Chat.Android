@@ -12,9 +12,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v4.content.PermissionChecker.PERMISSION_GRANTED
@@ -55,6 +53,7 @@ class ProfileFragment : Fragment(), ProfileView, ActionMode.Callback {
     private var avatarImageUri: Uri? = null
     private var tempCameraUri: Uri? = null
     private var isAvatarChanged = false
+
     //request codes
     private var CHOOSE_PICKER_MODE = 193
     private val CAMERA_REQUEST_CODE = 108
@@ -98,7 +97,7 @@ class ProfileFragment : Fragment(), ProfileView, ActionMode.Callback {
                 val permissionCheck = ContextCompat.checkSelfPermission(context!!,
                         Manifest.permission.READ_EXTERNAL_STORAGE)
                 if (permissionCheck != PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(activity as FragmentActivity, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), CHOOSE_PICKER_MODE)
+                    requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), CHOOSE_PICKER_MODE)
                 } else {
                     openImagePickerChooserDialog()
                 }
@@ -269,6 +268,14 @@ class ProfileFragment : Fragment(), ProfileView, ActionMode.Callback {
                 } else {
                     presenter.updateUserProfile(text_email.textContent, text_name.textContent, text_username.textContent, text_avatar_url.textContent, avatarImage, avatarImageUri)
                     mode.finish()
+                }
+                true
+            }
+
+            R.id.home -> {
+                if (isAvatarChanged) {
+                    image_avatar.setImageURI(currentAvatar)
+                    isAvatarChanged = false
                 }
                 true
             }
